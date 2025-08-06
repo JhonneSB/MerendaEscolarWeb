@@ -520,7 +520,8 @@
         .chart-container {
             position: relative;
             width: 100%;
-            min-height: 300px;
+            height: 300px;
+            margin: 20px 0;
         }
         
         /* Responsividade */
@@ -583,6 +584,10 @@
                 width: 95%;
                 padding: 20px 15px;
             }
+            
+            .chart-container {
+                height: 250px;
+            }
         }
         
         @media (max-width: 576px) {
@@ -608,7 +613,7 @@
             }
             
             .chart-container {
-                min-height: 250px;
+                height: 200px;
             }
         }
     </style>
@@ -960,7 +965,12 @@
             { id: 2, name: "Feijão", quantity: 30, unit: "kg", minStock: 15, category: "Cereal" },
             { id: 3, name: "Óleo de Soja", quantity: 10, unit: "L", minStock: 5, category: "Outro" },
             { id: 4, name: "Macarrão", quantity: 25, unit: "kg", minStock: 10, category: "Cereal" },
-            { id: 5, name: "Leite", quantity: 20, unit: "L", minStock: 10, category: "Laticínio" }
+            { id: 5, name: "Leite", quantity: 20, unit: "L", minStock: 10, category: "Laticínio" },
+            { id: 6, name: "Açúcar", quantity: 15, unit: "kg", minStock: 8, category: "Outro" },
+            { id: 7, name: "Sal", quantity: 8, unit: "kg", minStock: 4, category: "Outro" },
+            { id: 8, name: "Farinha de Trigo", quantity: 18, unit: "kg", minStock: 10, category: "Cereal" },
+            { id: 9, name: "Carne Moída", quantity: 12, unit: "kg", minStock: 8, category: "Proteína" },
+            { id: 10, name: "Frango", quantity: 15, unit: "kg", minStock: 10, category: "Proteína" }
         ];
 
         let feedings = JSON.parse(localStorage.getItem('merendaFeedings')) || [
@@ -970,11 +980,37 @@
                 type: "Almoço", 
                 foods: [
                     { itemId: 1, name: "Arroz", quantity: 5, unit: "kg" },
-                    { itemId: 2, name: "Feijão", quantity: 3, unit: "kg" }
+                    { itemId: 2, name: "Feijão", quantity: 3, unit: "kg" },
+                    { itemId: 9, name: "Carne Moída", quantity: 4, unit: "kg" }
                 ], 
                 quantity: 150, 
                 responsible: "Maria Silva",
                 notes: "Preparo normal"
+            },
+            { 
+                id: 2, 
+                date: new Date(Date.now() - 86400000).toISOString().split('T')[0], 
+                type: "Lanche", 
+                foods: [
+                    { itemId: 5, name: "Leite", quantity: 5, unit: "L" },
+                    { itemId: 6, name: "Açúcar", quantity: 1, unit: "kg" }
+                ], 
+                quantity: 120, 
+                responsible: "João Santos",
+                notes: "Lanche da tarde"
+            },
+            { 
+                id: 3, 
+                date: new Date(Date.now() - 2 * 86400000).toISOString().split('T')[0], 
+                type: "Almoço", 
+                foods: [
+                    { itemId: 1, name: "Arroz", quantity: 4, unit: "kg" },
+                    { itemId: 10, name: "Frango", quantity: 6, unit: "kg" },
+                    { itemId: 8, name: "Farinha de Trigo", quantity: 2, unit: "kg" }
+                ], 
+                quantity: 130, 
+                responsible: "Ana Oliveira",
+                notes: "Frango empanado"
             }
         ];
 
@@ -984,6 +1020,10 @@
             schoolAddress: "",
             schoolContact: ""
         };
+
+        // Variáveis para armazenar os gráficos
+        let foodConsumptionChart = null;
+        let studentsChart = null;
 
         // Toggle sidebar em dispositivos móveis
         function toggleSidebar() {
@@ -1692,8 +1732,8 @@
             const foodQuantities = Object.values(foodConsumption);
             
             // Destruir gráfico anterior se existir
-            if (window.foodConsumptionChart) {
-                window.foodConsumptionChart.destroy();
+            if (foodConsumptionChart) {
+                foodConsumptionChart.destroy();
             }
             
             // Se não houver dados, mostrar mensagem
@@ -1702,7 +1742,7 @@
                 foodQuantities.push(1);
             }
             
-            window.foodConsumptionChart = new Chart(foodConsumptionCtx, {
+            foodConsumptionChart = new Chart(foodConsumptionCtx, {
                 type: 'pie',
                 data: {
                     labels: foodNames,
@@ -1730,7 +1770,7 @@
                         },
                         title: {
                             display: true,
-                            text: 'Consumo de Alimentos',
+                            text: 'Consumo de Alimentos (kg/L)',
                             font: {
                                 size: 16
                             },
@@ -1793,11 +1833,11 @@
             }
             
             // Destruir gráfico anterior se existir
-            if (window.studentsChart) {
-                window.studentsChart.destroy();
+            if (studentsChart) {
+                studentsChart.destroy();
             }
             
-            window.studentsChart = new Chart(studentsCtx, {
+            studentsChart = new Chart(studentsCtx, {
                 type: 'bar',
                 data: {
                     labels: dates,
@@ -1808,13 +1848,12 @@
                     maintainAspectRatio: false,
                     scales: {
                         x: {
-                            stacked: true,
+                            stacked: false,
                             grid: {
                                 display: false
                             }
                         },
                         y: {
-                            stacked: true,
                             beginAtZero: true,
                             title: {
                                 display: true,
@@ -1824,7 +1863,7 @@
                                 }
                             },
                             ticks: {
-                                stepSize: 50
+                                stepSize: 10
                             }
                         }
                     },
@@ -1989,12 +2028,13 @@
 
         // Função auxiliar para gerar cores aleatórias
         function getRandomColor() {
-            const letters = '0123456789ABCDEF';
-            let color = '#';
-            for (let i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color;
+            const colors = [
+                '#3498db', '#2ecc71', '#f39c12', '#e74c3c', '#9b59b6',
+                '#1abc9c', '#d35400', '#34495e', '#16a085', '#c0392b',
+                '#2980b9', '#27ae60', '#e67e22', '#c0392b', '#8e44ad',
+                '#16a085', '#f1c40f', '#7f8c8d', '#2c3e50', '#d35400'
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
         }
 
         // Função auxiliar para formatar data
