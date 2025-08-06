@@ -133,24 +133,6 @@
             gap: 10px;
         }
         
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: var(--primary-color);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-        
         /* Cards */
         .card {
             background: white;
@@ -209,8 +191,10 @@
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
             font-weight: 500;
+            height: 40px;
         }
         
         .btn i {
@@ -455,6 +439,7 @@
         .file-label {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
             padding: 10px 16px;
             background-color: #6c757d;
@@ -463,6 +448,8 @@
             cursor: pointer;
             transition: background-color 0.3s;
             font-size: 0.9rem;
+            height: 40px;
+            box-sizing: border-box;
         }
         
         .file-label:hover {
@@ -529,6 +516,13 @@
             display: block;
         }
         
+        /* Gráficos */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            min-height: 300px;
+        }
+        
         /* Responsividade */
         @media (max-width: 992px) {
             .sidebar {
@@ -579,18 +573,15 @@
                 padding: 10px;
             }
             
-            .btn {
+            .btn, .file-label {
                 padding: 8px 12px;
                 font-size: 0.85rem;
+                height: 36px;
             }
             
             .modal-content {
                 width: 95%;
                 padding: 20px 15px;
-            }
-            
-            .user-name {
-                display: none;
             }
         }
         
@@ -602,7 +593,6 @@
             
             .backup-actions .btn, .backup-actions .file-label {
                 width: 100%;
-                justify-content: center;
             }
             
             .header-title span {
@@ -614,7 +604,11 @@
             }
             
             .sidebar {
-                width: 80%;
+                width: 85%;
+            }
+            
+            .chart-container {
+                min-height: 250px;
             }
         }
     </style>
@@ -654,10 +648,6 @@
                         <i class="fas fa-utensils"></i>
                         <span>Sistema Merenda</span>
                     </h1>
-                </div>
-                <div class="user-profile">
-                    <div class="user-avatar">AD</div>
-                    <span class="user-name">Admin</span>
                 </div>
             </div>
         </header>
@@ -787,11 +777,15 @@
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
                             <div class="card">
                                 <h3><i class="fas fa-chart-pie"></i> Consumo de Alimentos</h3>
-                                <canvas id="foodConsumptionChart" height="200"></canvas>
+                                <div class="chart-container">
+                                    <canvas id="foodConsumptionChart"></canvas>
+                                </div>
                             </div>
                             <div class="card">
                                 <h3><i class="fas fa-chart-line"></i> Alunos Atendidos</h3>
-                                <canvas id="studentsChart" height="200"></canvas>
+                                <div class="chart-container">
+                                    <canvas id="studentsChart"></canvas>
+                                </div>
                             </div>
                         </div>
                         
@@ -1702,6 +1696,12 @@
                 window.foodConsumptionChart.destroy();
             }
             
+            // Se não houver dados, mostrar mensagem
+            if (foodNames.length === 0) {
+                foodNames.push('Nenhum dado disponível');
+                foodQuantities.push(1);
+            }
+            
             window.foodConsumptionChart = new Chart(foodConsumptionCtx, {
                 type: 'pie',
                 data: {
@@ -1717,13 +1717,38 @@
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            position: 'bottom'
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 12
+                                }
+                            }
                         },
                         title: {
                             display: true,
-                            text: 'Consumo de Alimentos'
+                            text: 'Consumo de Alimentos',
+                            font: {
+                                size: 16
+                            },
+                            padding: {
+                                top: 10,
+                                bottom: 20
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${value} (${percentage}%)`;
+                                }
+                            }
                         }
                     }
                 }
@@ -1757,6 +1782,16 @@
                 };
             });
             
+            // Se não houver dados, mostrar mensagem
+            if (dates.length === 0) {
+                dates.push('Nenhum dado');
+                datasets.push({
+                    label: 'Nenhum dado',
+                    data: [1],
+                    backgroundColor: '#95a5a6'
+                });
+            }
+            
             // Destruir gráfico anterior se existir
             if (window.studentsChart) {
                 window.studentsChart.destroy();
@@ -1770,23 +1805,53 @@
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
                         x: {
-                            stacked: true
+                            stacked: true,
+                            grid: {
+                                display: false
+                            }
                         },
                         y: {
                             stacked: true,
                             beginAtZero: true,
                             title: {
                                 display: true,
-                                text: 'Número de Alunos'
+                                text: 'Número de Alunos',
+                                font: {
+                                    size: 14
+                                }
+                            },
+                            ticks: {
+                                stepSize: 50
                             }
                         }
                     },
                     plugins: {
                         title: {
                             display: true,
-                            text: 'Alunos Atendidos por Data'
+                            text: 'Alunos Atendidos por Data',
+                            font: {
+                                size: 16
+                            },
+                            padding: {
+                                top: 10,
+                                bottom: 20
+                            }
+                        },
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
                         }
                     }
                 }
@@ -1963,6 +2028,9 @@
             
             // Atualizar estatísticas do dashboard
             updateDashboardStats();
+            
+            // Inicializar gráficos
+            updateCharts();
             
             // Fechar modais ao clicar no overlay (fora do modal)
             window.addEventListener('click', function(event) {
