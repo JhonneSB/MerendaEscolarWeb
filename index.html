@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Merenda Escolar</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 4px solid #3498db;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        th {
+            background-color: #f2f5f7;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        tr:hover {
+            background-color: #f8fafb;
+        }
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        .btn-success {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+        .btn-warning {
+            background-color: #f39c12;
+            color: white;
+        }
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+        .btn-info {
+            background-color: #1abc9c;
+            color: white;
+        }
+        .btn-info:hover {
+            background-color: #16a085;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(3px);
+        }
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .modal-title {
+            font-size: 22px;
+            color: #2c3e50;
+            margin: 0;
+        }
+        .close {
+            font-size: 24px;
+            cursor: pointer;
+            color: #7f8c8d;
+            transition: color 0.3s;
+        }
+        .close:hover {
+            color: #e74c3c;
+        }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            border-left: 4px solid;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border-left-color: #28a745;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left-color: #dc3545;
+        }
+        .food-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+        .food-item select, .food-item input {
+            flex: 1;
+        }
+        .remove-food {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .badge-warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .badge-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .card-title {
+            font-size: 20px;
+            color: #2c3e50;
+            margin: 0;
+        }
+        .file-input {
+            display: none;
+        }
+        .file-label {
+            display: inline-block;
+            padding: 10px 16px;
+            background-color: #6c757d;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .file-label:hover {
+            background-color: #5a6268;
+        }
+        @media (max-width: 768px) {
+            table {
+                font-size: 14px;
+            }
+            th, td {
+                padding: 10px;
+            }
+            .food-item {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><i class="fas fa-utensils"></i> Sistema de Merenda Escolar</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="alertContainer"></div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title"><i class="fas fa-boxes"></i> Controle de Estoque</h2>
+                <div>
+                    <button class="btn btn-primary" onclick="openModal('addItem')">
+                        <i class="fas fa-plus"></i> Adicionar Item
+                    </button>
+                    <button class="btn btn-info" onclick="exportToPDF('inventory')">
+                        <i class="fas fa-file-pdf"></i> Exportar PDF
+                    </button>
+                    <button class="btn btn-success" onclick="exportToTXT('inventory')">
+                        <i class="fas fa-file-alt"></i> Exportar TXT
+                    </button>
+                    <label class="file-label">
+                        <i class="fas fa-file-import"></i> Importar TXT
+                        <input type="file" id="importInventory" class="file-input" accept=".txt" onchange="importFromTXT('inventory', this)">
+                    </label>
+                </div>
+            </div>
+            <table id="inventoryTable">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Quantidade</th>
+                        <th>Unidade</th>
+                        <th>Estoque Mínimo</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Itens serão adicionados via JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title"><i class="fas fa-clipboard-list"></i> Registro de Alimentação</h2>
+                <div>
+                    <button class="btn btn-primary" onclick="openModal('addFeeding')">
+                        <i class="fas fa-plus"></i> Registrar Alimentação
+                    </button>
+                    <button class="btn btn-info" onclick="exportToPDF('feedings')">
+                        <i class="fas fa-file-pdf"></i> Exportar PDF
+                    </button>
+                    <button class="btn btn-success" onclick="exportToTXT('feedings')">
+                        <i class="fas fa-file-alt"></i> Exportar TXT
+                    </button>
+                    <label class="file-label">
+                        <i class="fas fa-file-import"></i> Importar TXT
+                        <input type="file" id="importFeedings" class="file-input" accept=".txt" onchange="importFromTXT('feedings', this)">
+                    </label>
+                </div>
+            </div>
+            <table id="feedingsTable">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Refeição</th>
+                        <th>Alimentos Utilizados</th>
+                        <th>Alunos</th>
+                        <th>Responsável</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Registros serão adicionados via JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal para adicionar item -->
+    <div id="addItemModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-box"></i> Adicionar Item ao Estoque</h3>
+                <span class="close" onclick="closeModal('addItem')">&times;</span>
+            </div>
+            <form id="addItemForm" onsubmit="addItem(event)">
+                <div class="form-group">
+                    <label for="itemName"><i class="fas fa-tag"></i> Nome do Item</label>
+                    <input type="text" id="itemName" required>
+                </div>
+                <div class="form-group">
+                    <label for="itemQuantity"><i class="fas fa-balance-scale"></i> Quantidade</label>
+                    <input type="number" id="itemQuantity" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="itemUnit"><i class="fas fa-ruler"></i> Unidade de Medida</label>
+                    <select id="itemUnit" required>
+                        <option value="kg">Quilograma (kg)</option>
+                        <option value="g">Grama (g)</option>
+                        <option value="L">Litro (L)</option>
+                        <option value="ml">Mililitro (ml)</option>
+                        <option value="un">Unidade</option>
+                        <option value="cx">Caixa</option>
+                        <option value="lata">Lata</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="itemMinStock"><i class="fas fa-exclamation-triangle"></i> Estoque Mínimo</label>
+                    <input type="number" id="itemMinStock" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="itemCategory"><i class="fas fa-list"></i> Categoria</label>
+                    <select id="itemCategory">
+                        <option value="Cereal">Cereal</option>
+                        <option value="Proteína">Proteína</option>
+                        <option value="Legume">Legume</option>
+                        <option value="Fruta">Fruta</option>
+                        <option value="Laticínio">Laticínio</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Salvar Item
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para registrar alimentação -->
+    <div id="addFeedingModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-utensils"></i> Registrar Alimentação</h3>
+                <span class="close" onclick="closeModal('addFeeding')">&times;</span>
+            </div>
+            <form id="addFeedingForm" onsubmit="addFeeding(event)">
+                <div class="form-group">
+                    <label for="feedingDate"><i class="fas fa-calendar-day"></i> Data</label>
+                    <input type="date" id="feedingDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="feedingType"><i class="fas fa-utensil-spoon"></i> Tipo de Refeição</label>
+                    <select id="feedingType" required>
+                        <option value="Café da manhã">Café da manhã</option>
+                        <option value="Lanche">Lanche</option>
+                        <option value="Almoço">Almoço</option>
+                        <option value="Jantar">Jantar</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-carrot"></i> Alimentos Utilizados</label>
+                    <div id="foodItemsContainer">
+                        <!-- Itens de alimentos serão adicionados aqui -->
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="addFoodItem()">
+                        <i class="fas fa-plus"></i> Adicionar Alimento
+                    </button>
+                </div>
+                
+                <div class="form-group">
+                    <label for="feedingQuantity"><i class="fas fa-users"></i> Quantidade de Alunos</label>
+                    <input type="number" id="feedingQuantity" required>
+                </div>
+                <div class="form-group">
+                    <label for="feedingResponsible"><i class="fas fa-user"></i> Responsável</label>
+                    <input type="text" id="feedingResponsible" required>
+                </div>
+                <div class="form-group">
+                    <label for="feedingNotes"><i class="fas fa-comment"></i> Observações</label>
+                    <textarea id="feedingNotes" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Registrar
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Inicializa o jsPDF
+        const { jsPDF } = window.jspdf;
+        
+        // Dados iniciais (simulando um banco de dados)
+        let inventory = JSON.parse(localStorage.getItem('merendaInventory')) || [
+            { id: 1, name: "Arroz", quantity: 50, unit: "kg", minStock: 20, category: "Cereal" },
+            { id: 2, name: "Feijão", quantity: 30, unit: "kg", minStock: 15, category: "Cereal" },
+            { id: 3, name: "Óleo de Soja", quantity: 10, unit: "L", minStock: 5, category: "Outro" },
+            { id: 4, name: "Macarrão", quantity: 25, unit: "kg", minStock: 10, category: "Cereal" },
+            { id: 5, name: "Leite", quantity: 20, unit: "L", minStock: 10, category: "Laticínio" }
+        ];
+
+        let feedings = JSON.parse(localStorage.getItem('merendaFeedings')) || [
+            { 
+                id: 1, 
+                date: new Date().toISOString().split('T')[0], 
+                type: "Almoço", 
+                foods: [
+                    { itemId: 1, name: "Arroz", quantity: 5, unit: "kg" },
+                    { itemId: 2, name: "Feijão", quantity: 3, unit: "kg" }
+                ], 
+                quantity: 150, 
+                responsible: "Maria Silva",
+                notes: "Preparo normal"
+            }
+        ];
+
+        // Funções para manipular os modais
+        function openModal(modalId) {
+            document.getElementById(modalId + 'Modal').style.display = 'flex';
+            
+            if (modalId === 'addFeeding') {
+                document.getElementById('foodItemsContainer').innerHTML = '';
+                addFoodItem();
+                
+                // Definir data atual como padrão
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('feedingDate').value = today;
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId + 'Modal').style.display = 'none';
+            document.getElementById(modalId + 'Form').reset();
+        }
+
+        // Função para mostrar alertas
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
+                ${message}
+            `;
+            alertContainer.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        // Função para adicionar item ao estoque
+        function addItem(event) {
+            event.preventDefault();
+            
+            const newItem = {
+                id: inventory.length > 0 ? Math.max(...inventory.map(item => item.id)) + 1 : 1,
+                name: document.getElementById('itemName').value,
+                quantity: parseFloat(document.getElementById('itemQuantity').value),
+                unit: document.getElementById('itemUnit').value,
+                minStock: parseFloat(document.getElementById('itemMinStock').value),
+                category: document.getElementById('itemCategory').value
+            };
+            
+            inventory.push(newItem);
+            saveData();
+            renderInventory();
+            closeModal('addItem');
+            showAlert('Item adicionado com sucesso!', 'success');
+        }
+
+        // Função para adicionar um campo de alimento no formulário de alimentação
+        function addFoodItem() {
+            const container = document.getElementById('foodItemsContainer');
+            const div = document.createElement('div');
+            div.className = 'food-item';
+            
+            // Select para escolher o item
+            const select = document.createElement('select');
+            select.required = true;
+            
+            // Adiciona uma opção vazia
+            const emptyOption = document.createElement('option');
+            emptyOption.value = '';
+            emptyOption.textContent = 'Selecione um item';
+            select.appendChild(emptyOption);
+            
+            // Adiciona os itens do estoque
+            inventory.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.id;
+                option.textContent = `${item.name} (${item.quantity} ${item.unit})`;
+                option.setAttribute('data-unit', item.unit);
+                select.appendChild(option);
+            });
+            
+            // Input para quantidade
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.step = '0.01';
+            input.placeholder = 'Quantidade';
+            input.required = true;
+            
+            // Span para unidade
+            const unitSpan = document.createElement('span');
+            unitSpan.textContent = '';
+            unitSpan.style.minWidth = '30px';
+            
+            // Botão para remover
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'remove-food';
+            removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+            removeBtn.onclick = function() {
+                div.remove();
+            };
+            
+            // Atualiza a unidade quando o item é selecionado
+            select.onchange = function() {
+                const selectedOption = this.options[this.selectedIndex];
+                unitSpan.textContent = selectedOption.getAttribute('data-unit');
+            };
+            
+            div.appendChild(select);
+            div.appendChild(input);
+            div.appendChild(unitSpan);
+            div.appendChild(removeBtn);
+            
+            container.appendChild(div);
+        }
+
+        // Função para registrar alimentação
+        function addFeeding(event) {
+            event.preventDefault();
+            
+            // Coletar os alimentos utilizados
+            const foodItems = [];
+            const foodDivs = document.querySelectorAll('#foodItemsContainer .food-item');
+            
+            foodDivs.forEach(div => {
+                const select = div.querySelector('select');
+                const input = div.querySelector('input');
+                const unitSpan = div.querySelector('span');
+                
+                const itemId = parseInt(select.value);
+                const item = inventory.find(i => i.id === itemId);
+                
+                if (item) {
+                    const quantityUsed = parseFloat(input.value);
+                    
+                    if (quantityUsed > item.quantity) {
+                        showAlert(`Quantidade insuficiente de ${item.name} em estoque!`, 'danger');
+                        return;
+                    }
+                    
+                    foodItems.push({
+                        itemId: item.id,
+                        name: item.name,
+                        quantity: quantityUsed,
+                        unit: item.unit
+                    });
+                }
+            });
+            
+            if (foodItems.length === 0) {
+                showAlert('Adicione pelo menos um alimento utilizado!', 'danger');
+                return;
+            }
+            
+            // Criar novo registro
+            const newFeeding = {
+                id: feedings.length > 0 ? Math.max(...feedings.map(f => f.id)) + 1 : 1,
+                date: document.getElementById('feedingDate').value,
+                type: document.getElementById('feedingType').value,
+                foods: foodItems,
+                quantity: parseInt(document.getElementById('feedingQuantity').value),
+                responsible: document.getElementById('feedingResponsible').value,
+                notes: document.getElementById('feedingNotes').value
+            };
+            
+            // Atualizar estoque
+            foodItems.forEach(food => {
+                const itemIndex = inventory.findIndex(item => item.id === food.itemId);
+                if (itemIndex !== -1) {
+                    inventory[itemIndex].quantity -= food.quantity;
+                }
+            });
+            
+            feedings.push(newFeeding);
+            saveData();
+            renderInventory();
+            renderFeedings();
+            closeModal('addFeeding');
+            showAlert('Alimentação registrada com sucesso!', 'success');
+        }
+
+        // Função para renderizar a tabela de estoque
+        function renderInventory() {
+            const tbody = document.querySelector('#inventoryTable tbody');
+            tbody.innerHTML = '';
+            
+            inventory.forEach(item => {
+                const row = document.createElement('tr');
+                let status, badgeClass;
+                
+                if (item.quantity <= item.minStock * 0.3) {
+                    status = 'Crítico';
+                    badgeClass = 'badge-danger';
+                } else if (item.quantity <= item.minStock) {
+                    status = 'Atenção';
+                    badgeClass = 'badge-warning';
+                } else {
+                    status = 'OK';
+                    badgeClass = 'badge-success';
+                }
+                
+                row.innerHTML = `
+                    <td>${item.name} <small>(${item.category})</small></td>
+                    <td>${item.quantity}</td>
+                    <td>${item.unit}</td>
+                    <td>${item.minStock}</td>
+                    <td><span class="badge ${badgeClass}">${status}</span></td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteItem(${item.id})">
+                            <i class="fas fa-trash"></i> Remover
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        // Função para renderizar a tabela de alimentação
+        function renderFeedings() {
+            const tbody = document.querySelector('#feedingsTable tbody');
+            tbody.innerHTML = '';
+            
+            // Ordenar por data (mais recente primeiro)
+            const sortedFeedings = [...feedings].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            sortedFeedings.forEach(feeding => {
+                const row = document.createElement('tr');
+                
+                // Formatando os alimentos utilizados
+                const foodsList = feeding.foods.map(food => 
+                    `${food.name}: ${food.quantity} ${food.unit}`
+                ).join(', ');
+                
+                row.innerHTML = `
+                    <td>${formatDate(feeding.date)}</td>
+                    <td>${feeding.type}</td>
+                    <td>${foodsList}</td>
+                    <td>${feeding.quantity}</td>
+                    <td>${feeding.responsible}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteFeeding(${feeding.id})">
+                            <i class="fas fa-trash"></i> Remover
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        // Função para deletar item do estoque
+        function deleteItem(itemId) {
+            if (confirm('Tem certeza que deseja remover este item do estoque?')) {
+                inventory = inventory.filter(item => item.id !== itemId);
+                saveData();
+                renderInventory();
+                showAlert('Item removido com sucesso!', 'success');
+            }
+        }
+
+        // Função para deletar registro de alimentação
+        function deleteFeeding(feedingId) {
+            if (confirm('Tem certeza que deseja excluir este registro de alimentação?')) {
+                feedings = feedings.filter(feeding => feeding.id !== feedingId);
+                saveData();
+                renderFeedings();
+                showAlert('Registro de alimentação excluído com sucesso!', 'success');
+            }
+        }
+
+        // Função para salvar dados no localStorage
+        function saveData() {
+            localStorage.setItem('merendaInventory', JSON.stringify(inventory));
+            localStorage.setItem('merendaFeedings', JSON.stringify(feedings));
+        }
+
+        // Função para exportar para PDF
+        function exportToPDF(type) {
+            const doc = new jsPDF();
+            const title = type === 'inventory' ? 'Relatório de Estoque' : 'Registros de Alimentação';
+            const date = formatDate(new Date().toISOString(), true);
+            
+            // Cabeçalho do PDF
+            doc.setFontSize(18);
+            doc.setTextColor(40, 62, 80); // Cor azul escuro
+            doc.text(title, 105, 20, { align: 'center' });
+            
+            doc.setFontSize(12);
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Emitido em: ${date}`, 105, 30, { align: 'center' });
+            
+            // Linha divisória
+            doc.setDrawColor(200, 200, 200);
+            doc.line(20, 35, 190, 35);
+            
+            if (type === 'inventory') {
+                // Tabela de estoque
+                const headers = [['Item', 'Quantidade', 'Unidade', 'Estoque Mínimo', 'Status']];
+                const data = inventory.map(item => {
+                    let status;
+                    if (item.quantity <= item.minStock * 0.3) {
+                        status = 'Crítico';
+                    } else if (item.quantity <= item.minStock) {
+                        status = 'Atenção';
+                    } else {
+                        status = 'OK';
+                    }
+                    
+                    return [
+                        item.name + (item.category ? ` (${item.category})` : ''),
+                        item.quantity.toString(),
+                        item.unit,
+                        item.minStock.toString(),
+                        status
+                    ];
+                });
+                
+                doc.autoTable({
+                    head: headers,
+                    body: data,
+                    startY: 40,
+                    theme: 'grid',
+                    headStyles: {
+                        fillColor: [44, 62, 80], // Azul escuro
+                        textColor: 255,
+                        fontSize: 10
+                    },
+                    alternateRowStyles: {
+                        fillColor: [245, 245, 245]
+                    },
+                    columnStyles: {
+                        0: { cellWidth: 'auto' },
+                        1: { cellWidth: 'auto' },
+                        2: { cellWidth: 'auto' },
+                        3: { cellWidth: 'auto' },
+                        4: { cellWidth: 'auto' }
+                    },
+                    margin: { top: 40 }
+                });
+                
+                // Rodapé
+                doc.setFontSize(10);
+                doc.setTextColor(100, 100, 100);
+                doc.text(`Total de itens: ${inventory.length}`, 20, doc.lastAutoTable.finalY + 15);
+                
+                // Adicionar página de resumo
+                doc.addPage();
+                doc.setFontSize(16);
+                doc.setTextColor(40, 62, 80);
+                doc.text('Resumo do Estoque', 105, 20, { align: 'center' });
+                
+                // Gráfico de status (simulado)
+                const statusCounts = {
+                    Crítico: inventory.filter(i => i.quantity <= i.minStock * 0.3).length,
+                    Atenção: inventory.filter(i => i.quantity > i.minStock * 0.3 && i.quantity <= i.minStock).length,
+                    OK: inventory.filter(i => i.quantity > i.minStock).length
+                };
+                
+                // Desenhar gráfico simples
+                const startY = 40;
+                const maxWidth = 150;
+                const total = inventory.length;
+                
+                Object.entries(statusCounts).forEach(([status, count], index) => {
+                    if (count === 0) return;
+                    
+                    const width = (count / total) * maxWidth;
+                    const y = startY + (index * 15);
+                    
+                    // Barra
+                    if (status === 'Crítico') doc.setFillColor(231, 76, 60);
+                    else if (status === 'Atenção') doc.setFillColor(243, 156, 18);
+                    else doc.setFillColor(46, 204, 113);
+                    
+                    doc.rect(30, y, width, 10, 'F');
+                    
+                    // Legenda
+                    doc.setFontSize(10);
+                    doc.setTextColor(80, 80, 80);
+                    doc.text(`${status}: ${count} itens (${Math.round((count / total) * 100)}%)`, 35 + width, y + 7);
+                });
+                
+            } else {
+                // Tabela de alimentação
+                const headers = [['Data', 'Refeição', 'Alimentos', 'Alunos', 'Responsável']];
+                const data = feedings.map(feeding => {
+                    const foodsList = feeding.foods.map(f => 
+                        `${f.name}: ${f.quantity} ${f.unit}`
+                    ).join('\n');
+                    
+                    return [
+                        formatDate(feeding.date),
+                        feeding.type,
+                        foodsList,
+                        feeding.quantity.toString(),
+                        feeding.responsible
+                    ];
+                });
+                
+                doc.autoTable({
+                    head: headers,
+                    body: data,
+                    startY: 40,
+                    theme: 'grid',
+                    headStyles: {
+                        fillColor: [44, 62, 80],
+                        textColor: 255,
+                        fontSize: 10
+                    },
+                    alternateRowStyles: {
+                        fillColor: [245, 245, 245]
+                    },
+                    columnStyles: {
+                        2: { cellWidth: 60 } // Largura fixa para coluna de alimentos
+                    },
+                    margin: { top: 40 }
+                });
+                
+                // Rodapé
+                doc.setFontSize(10);
+                doc.setTextColor(100, 100, 100);
+                doc.text(`Total de registros: ${feedings.length}`, 20, doc.lastAutoTable.finalY + 15);
+            }
+            
+            // Salvar o PDF
+            doc.save(`${title.toLowerCase().replace(/ /g, '_')}_${date.replace(/\//g, '-')}.pdf`);
+            showAlert('PDF gerado com sucesso!', 'success');
+        }
+
+        // Função para exportar para TXT
+        function exportToTXT(type) {
+            let content = '';
+            let filename = '';
+            
+            if (type === 'inventory') {
+                filename = 'estoque_merenda.txt';
+                content = '=== ESTOQUE DE MERENDA ===\n\n';
+                
+                inventory.forEach(item => {
+                    content += `Item: ${item.name}\n`;
+                    content += `Categoria: ${item.category}\n`;
+                    content += `Quantidade: ${item.quantity} ${item.unit}\n`;
+                    content += `Estoque Mínimo: ${item.minStock} ${item.unit}\n`;
+                    content += `Status: ${item.quantity <= item.minStock * 0.3 ? 'CRÍTICO' : item.quantity <= item.minStock ? 'ATENÇÃO' : 'OK'}\n\n`;
+                });
+            } else if (type === 'feedings') {
+                filename = 'registros_alimentacao.txt';
+                content = '=== REGISTROS DE ALIMENTAÇÃO ===\n\n';
+                
+                // Ordenar por data (mais recente primeiro)
+                const sortedFeedings = [...feedings].sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                sortedFeedings.forEach(feeding => {
+                    content += `Data: ${formatDate(feeding.date)}\n`;
+                    content += `Refeição: ${feeding.type}\n`;
+                    content += `Alunos atendidos: ${feeding.quantity}\n`;
+                    content += `Responsável: ${feeding.responsible}\n`;
+                    content += `Alimentos utilizados:\n`;
+                    
+                    feeding.foods.forEach(food => {
+                        content += `  - ${food.name}: ${food.quantity} ${food.unit}\n`;
+                    });
+                    
+                    if (feeding.notes) {
+                        content += `Observações: ${feeding.notes}\n`;
+                    }
+                    
+                    content += '\n';
+                });
+            }
+            
+            // Criar blob e fazer download
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showAlert(`Arquivo ${filename} gerado com sucesso!`, 'success');
+        }
+
+        // Função para importar de TXT
+        function importFromTXT(type, input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const content = e.target.result;
+                    const data = JSON.parse(content);
+                    
+                    if (type === 'inventory') {
+                        if (!Array.isArray(data) || !data.every(item => item.name && item.quantity !== undefined)) {
+                            throw new Error('Formato inválido para estoque');
+                        }
+                        inventory = data;
+                        // Garantir que os IDs sejam únicos
+                        inventory.forEach((item, index) => {
+                            item.id = index + 1;
+                        });
+                        showAlert('Estoque importado com sucesso!', 'success');
+                    } else if (type === 'feedings') {
+                        if (!Array.isArray(data) || !data.every(f => f.date && f.type && Array.isArray(f.foods))) {
+                            throw new Error('Formato inválido para registros de alimentação');
+                        }
+                        feedings = data;
+                        // Garantir que os IDs sejam únicos
+                        feedings.forEach((feeding, index) => {
+                            feeding.id = index + 1;
+                        });
+                        showAlert('Registros de alimentação importados com sucesso!', 'success');
+                    }
+                    
+                    saveData();
+                    renderInventory();
+                    renderFeedings();
+                } catch (error) {
+                    showAlert(`Erro ao importar arquivo: ${error.message}`, 'danger');
+                    console.error(error);
+                }
+            };
+            reader.readAsText(file);
+            
+            // Limpar o input para permitir nova seleção do mesmo arquivo
+            input.value = '';
+        }
+
+        // Função para exportar localStorage para TXT
+        function exportLocalStorageToTXT() {
+            const data = {
+                inventory: JSON.parse(localStorage.getItem('merendaInventory')) || [],
+                feedings: JSON.parse(localStorage.getItem('merendaFeedings')) || []
+            };
+            
+            const content = JSON.stringify(data, null, 2);
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'backup_merenda.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showAlert('Backup do sistema exportado com sucesso!', 'success');
+        }
+
+        // Função para importar localStorage de TXT
+        function importLocalStorageFromTXT(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const content = e.target.result;
+                    const data = JSON.parse(content);
+                    
+                    if (!data.inventory || !data.feedings) {
+                        throw new Error('Formato inválido para backup');
+                    }
+                    
+                    localStorage.setItem('merendaInventory', JSON.stringify(data.inventory));
+                    localStorage.setItem('merendaFeedings', JSON.stringify(data.feedings));
+                    
+                    // Recarregar os dados
+                    inventory = JSON.parse(localStorage.getItem('merendaInventory')) || [];
+                    feedings = JSON.parse(localStorage.getItem('merendaFeedings')) || [];
+                    
+                    renderInventory();
+                    renderFeedings();
+                    showAlert('Backup do sistema importado com sucesso!', 'success');
+                } catch (error) {
+                    showAlert(`Erro ao importar backup: ${error.message}`, 'danger');
+                    console.error(error);
+                }
+            };
+            reader.readAsText(file);
+            
+            // Limpar o input para permitir nova seleção do mesmo arquivo
+            input.value = '';
+        }
+
+        // Função auxiliar para formatar data
+        function formatDate(dateString, includeTime = false) {
+            const date = new Date(dateString);
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            
+            if (includeTime) {
+                options.hour = '2-digit';
+                options.minute = '2-digit';
+            }
+            
+            return date.toLocaleDateString('pt-BR', options);
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            // Definir data atual como padrão no formulário de refeição
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('feedingDate').value = today;
+            
+            // Renderizar tabelas
+            renderInventory();
+            renderFeedings();
+            
+            // Adicionar botão de backup
+            const backupDiv = document.createElement('div');
+            backupDiv.style.marginTop = '20px';
+            backupDiv.style.textAlign = 'center';
+            backupDiv.innerHTML = `
+                <button class="btn btn-warning" onclick="exportLocalStorageToTXT()">
+                    <i class="fas fa-file-export"></i> Exportar Backup Completo
+                </button>
+                <label class="file-label" style="display: inline-block; margin-left: 10px;">
+                    <i class="fas fa-file-import"></i> Importar Backup
+                    <input type="file" id="importBackup" class="file-input" accept=".txt" onchange="importLocalStorageFromTXT(this)">
+                </label>
+            `;
+            document.querySelector('.container').appendChild(backupDiv);
+        });
+    </script>
+</body>
+</html>
