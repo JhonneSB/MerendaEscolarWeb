@@ -5,128 +5,275 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Merenda Escolar</title>
     <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --secondary-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --info-color: #1abc9c;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --gray-color: #95a5a6;
+            --sidebar-width: 280px;
+        }
+        
         * {
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
             margin: 0;
             padding: 0;
-            background-color: #f8f9fa;
-            color: #333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            display: flex;
+            min-height: 100vh;
+            transition: margin-left 0.3s;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(135deg, var(--dark-color), #1a252f);
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .sidebar-header h3 {
+            color: white;
+            margin-left: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0 20px;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            transition: all 0.3s;
+            border-radius: 6px;
+        }
+        
+        .sidebar-menu li a:hover, .sidebar-menu li a.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+        }
+        
+        .sidebar-menu li a i {
+            font-size: 1.1rem;
+            margin-right: 15px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Conteúdo principal */
+        .main-content {
+            flex: 1;
+            min-height: 100vh;
+            overflow-x: hidden;
+            margin-left: var(--sidebar-width);
+            transition: margin-left 0.3s;
+        }
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
+        
         header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
+            background-color: white;
+            padding: 15px 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 90;
         }
-        h1 {
-            margin: 0;
-            font-size: 28px;
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
         }
+        
+        .header-title {
+            font-size: 1.3rem;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        /* Cards */
         .card {
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
             padding: 25px;
-            margin-bottom: 25px;
-            border-left: 4px solid #3498db;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary-color);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
+        
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+        }
+        
+        /* Tabelas */
+        .table-responsive {
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 15px 0;
+            font-size: 0.95rem;
+            min-width: 600px;
         }
+        
         th, td {
             padding: 12px 15px;
             text-align: left;
             border-bottom: 1px solid #e0e0e0;
         }
+        
         th {
-            background-color: #f2f5f7;
+            background-color: #f8fafb;
             font-weight: 600;
-            color: #2c3e50;
+            color: var(--dark-color);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
         }
+        
         tr:hover {
             background-color: #f8fafb;
         }
+        
+        /* Botões */
         .btn {
             padding: 10px 16px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
-            margin-right: 8px;
-            margin-bottom: 8px;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            font-weight: 500;
         }
+        
+        .btn i {
+            font-size: 0.9rem;
+        }
+        
         .btn-primary {
-            background-color: #3498db;
+            background-color: var(--primary-color);
             color: white;
         }
+        
         .btn-primary:hover {
-            background-color: #2980b9;
+            background-color: var(--primary-dark);
         }
+        
         .btn-danger {
-            background-color: #e74c3c;
+            background-color: var(--danger-color);
             color: white;
         }
-        .btn-danger:hover {
-            background-color: #c0392b;
-        }
+        
         .btn-success {
-            background-color: #2ecc71;
+            background-color: var(--secondary-color);
             color: white;
         }
-        .btn-success:hover {
-            background-color: #27ae60;
-        }
+        
         .btn-warning {
-            background-color: #f39c12;
+            background-color: var(--warning-color);
             color: white;
         }
-        .btn-warning:hover {
-            background-color: #e67e22;
-        }
+        
         .btn-info {
-            background-color: #1abc9c;
+            background-color: var(--info-color);
             color: white;
         }
-        .btn-info:hover {
-            background-color: #16a085;
-        }
+        
+        /* Formulários */
         .form-group {
             margin-bottom: 18px;
         }
+        
         label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-weight: 600;
-            color: #2c3e50;
+            color: var(--dark-color);
         }
+        
         input, select, textarea {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
             border-radius: 6px;
-            font-size: 14px;
-            transition: border 0.3s;
+            font-size: 0.95rem;
+            transition: border 0.3s, box-shadow 0.3s;
         }
+        
         input:focus, select:focus, textarea:focus {
-            border-color: #3498db;
+            border-color: var(--primary-color);
             outline: none;
             box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
         }
+        
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -140,6 +287,7 @@
             align-items: center;
             backdrop-filter: blur(3px);
         }
+        
         .modal-content {
             background: white;
             padding: 25px;
@@ -149,7 +297,20 @@
             max-height: 90vh;
             overflow-y: auto;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            animation: modalFadeIn 0.3s;
         }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
         .modal-header {
             display: flex;
             justify-content: space-between;
@@ -158,47 +319,64 @@
             padding-bottom: 15px;
             border-bottom: 1px solid #eee;
         }
+        
         .modal-title {
-            font-size: 22px;
-            color: #2c3e50;
+            font-size: 1.3rem;
+            color: var(--dark-color);
             margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
+        
         .close {
-            font-size: 24px;
+            font-size: 1.5rem;
             cursor: pointer;
-            color: #7f8c8d;
+            color: var(--gray-color);
             transition: color 0.3s;
         }
+        
         .close:hover {
-            color: #e74c3c;
+            color: var(--danger-color);
         }
+        
+        /* Alertas */
         .alert {
             padding: 15px;
             margin-bottom: 20px;
             border-radius: 6px;
             border-left: 4px solid;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
+        
         .alert-success {
             background-color: #d4edda;
             color: #155724;
-            border-left-color: #28a745;
+            border-left-color: var(--secondary-color);
         }
+        
         .alert-danger {
             background-color: #f8d7da;
             color: #721c24;
-            border-left-color: #dc3545;
+            border-left-color: var(--danger-color);
         }
+        
+        /* Itens de alimento */
         .food-item {
             display: flex;
             gap: 12px;
             margin-bottom: 12px;
             align-items: center;
         }
+        
         .food-item select, .food-item input {
             flex: 1;
         }
+        
         .remove-food {
-            background-color: #e74c3c;
+            background-color: var(--danger-color);
             color: white;
             border: none;
             border-radius: 6px;
@@ -207,70 +385,236 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: background-color 0.3s;
         }
+        
+        .remove-food:hover {
+            background-color: #c0392b;
+        }
+        
+        /* Badges */
         .badge {
             display: inline-block;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
+        
         .badge-success {
             background-color: #d4edda;
             color: #155724;
         }
+        
         .badge-warning {
             background-color: #fff3cd;
             color: #856404;
         }
+        
         .badge-danger {
             background-color: #f8d7da;
             color: #721c24;
         }
+        
+        /* Cabeçalho do card */
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
         }
+        
         .card-title {
-            font-size: 20px;
-            color: #2c3e50;
+            font-size: 1.3rem;
+            color: var(--dark-color);
             margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
+        
+        .card-title i {
+            color: var(--primary-color);
+        }
+        
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        /* Input de arquivo */
         .file-input {
             display: none;
         }
+        
         .file-label {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             padding: 10px 16px;
             background-color: #6c757d;
             color: white;
             border-radius: 6px;
             cursor: pointer;
             transition: background-color 0.3s;
+            font-size: 0.9rem;
         }
+        
         .file-label:hover {
             background-color: #5a6268;
         }
+        
+        /* Seção de backup */
+        .backup-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .backup-title {
+            font-size: 1.1rem;
+            color: var(--dark-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .backup-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        /* Menu mobile */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--dark-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+        
+        /* Overlay para mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 999;
+            backdrop-filter: blur(3px);
+        }
+        
+        /* Páginas */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .sidebar-overlay.active {
+                display: block;
+            }
+        }
+        
         @media (max-width: 768px) {
-            table {
-                font-size: 14px;
-            }
-            th, td {
-                padding: 10px;
-            }
-            .food-item {
-                flex-direction: column;
-            }
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
             .card-header {
                 flex-direction: column;
                 align-items: flex-start;
+            }
+            
+            .card-actions {
+                width: 100%;
+            }
+            
+            .food-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .food-item select, .food-item input {
+                width: 100%;
+            }
+            
+            table {
+                font-size: 0.85rem;
+            }
+            
+            th, td {
+                padding: 10px;
+            }
+            
+            .btn {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px 15px;
+            }
+            
+            .user-name {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .backup-actions {
+                flex-direction: column;
                 gap: 10px;
+            }
+            
+            .backup-actions .btn, .backup-actions .file-label {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .header-title span {
+                display: none;
+            }
+            
+            .header-title i {
+                margin-right: 0;
+            }
+            
+            .sidebar {
+                width: 80%;
             }
         }
     </style>
@@ -279,87 +623,235 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
-    <header>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-utensils fa-2x"></i>
+            <h3>Merenda Escolar</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#" class="nav-link active" data-page="dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="#" class="nav-link" data-page="estoque"><i class="fas fa-boxes"></i> Estoque</a></li>
+            <li><a href="#" class="nav-link" data-page="alimentacao"><i class="fas fa-clipboard-list"></i> Alimentação</a></li>
+            <li><a href="#" class="nav-link" data-page="relatorios"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
+            <li><a href="#" class="nav-link" data-page="configuracoes"><i class="fas fa-cog"></i> Configurações</a></li>
+        </ul>
+    </aside>
+
+    <!-- Overlay para mobile -->
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Conteúdo principal -->
+    <main class="main-content">
+        <!-- Header -->
+        <header>
+            <div class="header-content">
+                <div style="display: flex; align-items: center;">
+                    <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="header-title">
+                        <i class="fas fa-utensils"></i>
+                        <span>Sistema Merenda</span>
+                    </h1>
+                </div>
+                <div class="user-profile">
+                    <div class="user-avatar">AD</div>
+                    <span class="user-name">Admin</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Container -->
         <div class="container">
-            <h1><i class="fas fa-utensils"></i> Sistema de Merenda Escolar</h1>
-        </div>
-    </header>
+            <div id="alertContainer"></div>
 
-    <div class="container">
-        <div id="alertContainer"></div>
-
-        <div class="card">
-            <div class="card-header">
-                <h2 class="card-title"><i class="fas fa-boxes"></i> Controle de Estoque</h2>
-                <div>
-                    <button class="btn btn-primary" onclick="openModal('addItem')">
-                        <i class="fas fa-plus"></i> Adicionar Item
-                    </button>
-                    <button class="btn btn-info" onclick="exportToPDF('inventory')">
-                        <i class="fas fa-file-pdf"></i> Exportar PDF
-                    </button>
-                    <button class="btn btn-success" onclick="exportToTXT('inventory')">
-                        <i class="fas fa-file-alt"></i> Exportar TXT
-                    </button>
-                    <label class="file-label">
-                        <i class="fas fa-file-import"></i> Importar TXT
-                        <input type="file" id="importInventory" class="file-input" accept=".txt" onchange="importFromTXT('inventory', this)">
-                    </label>
+            <!-- Página Dashboard -->
+            <div id="dashboard" class="page active">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-tachometer-alt"></i> Visão Geral</h2>
+                    </div>
+                    <div class="card-body">
+                        <p>Bem-vindo ao Sistema de Gestão de Merenda Escolar. Aqui você pode gerenciar o estoque de alimentos, registrar as refeições servidas e gerar relatórios.</p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px;">
+                            <div class="card" style="border-left-color: var(--primary-color);">
+                                <h3 style="color: var(--primary-color); margin-bottom: 10px;"><i class="fas fa-boxes"></i> Itens no Estoque</h3>
+                                <p style="font-size: 2rem; font-weight: bold;" id="totalItems">0</p>
+                            </div>
+                            
+                            <div class="card" style="border-left-color: var(--secondary-color);">
+                                <h3 style="color: var(--secondary-color); margin-bottom: 10px;"><i class="fas fa-utensils"></i> Refeições Registradas</h3>
+                                <p style="font-size: 2rem; font-weight: bold;" id="totalFeedings">0</p>
+                            </div>
+                            
+                            <div class="card" style="border-left-color: var(--warning-color);">
+                                <h3 style="color: var(--warning-color); margin-bottom: 10px;"><i class="fas fa-exclamation-triangle"></i> Itens Críticos</h3>
+                                <p style="font-size: 2rem; font-weight: bold;" id="criticalItems">0</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <table id="inventoryTable">
-                <thead>
-                    <tr>
-                        <th>Item</th>
-                        <th>Quantidade</th>
-                        <th>Unidade</th>
-                        <th>Estoque Mínimo</th>
-                        <th>Status</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Itens serão adicionados via JavaScript -->
-                </tbody>
-            </table>
-        </div>
 
-        <div class="card">
-            <div class="card-header">
-                <h2 class="card-title"><i class="fas fa-clipboard-list"></i> Registro de Alimentação</h2>
-                <div>
-                    <button class="btn btn-primary" onclick="openModal('addFeeding')">
-                        <i class="fas fa-plus"></i> Registrar Alimentação
-                    </button>
-                    <button class="btn btn-info" onclick="exportToPDF('feedings')">
-                        <i class="fas fa-file-pdf"></i> Exportar PDF
-                    </button>
-                    <button class="btn btn-success" onclick="exportToTXT('feedings')">
-                        <i class="fas fa-file-alt"></i> Exportar TXT
-                    </button>
-                    <label class="file-label">
-                        <i class="fas fa-file-import"></i> Importar TXT
-                        <input type="file" id="importFeedings" class="file-input" accept=".txt" onchange="importFromTXT('feedings', this)">
-                    </label>
+            <!-- Página Estoque -->
+            <div id="estoque" class="page">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-boxes"></i> Controle de Estoque</h2>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="openModal('addItem')">
+                                <i class="fas fa-plus"></i> Adicionar Item
+                            </button>
+                            <button class="btn btn-info" onclick="exportToPDF('inventory')">
+                                <i class="fas fa-file-pdf"></i> PDF
+                            </button>
+                            <button class="btn btn-success" onclick="exportToTXT('inventory')">
+                                <i class="fas fa-file-alt"></i> TXT
+                            </button>
+                            <label class="file-label">
+                                <i class="fas fa-file-import"></i> Importar
+                                <input type="file" id="importInventory" class="file-input" accept=".txt" onchange="importFromTXT('inventory', this)">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="inventoryTable">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Quantidade</th>
+                                    <th>Unidade</th>
+                                    <th>Estoque Mínimo</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Itens serão adicionados via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            <table id="feedingsTable">
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Refeição</th>
-                        <th>Alimentos Utilizados</th>
-                        <th>Alunos</th>
-                        <th>Responsável</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Registros serão adicionados via JavaScript -->
-                </tbody>
-            </table>
+
+            <!-- Página Alimentação -->
+            <div id="alimentacao" class="page">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-clipboard-list"></i> Registro de Alimentação</h2>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="openModal('addFeeding')">
+                                <i class="fas fa-plus"></i> Registrar
+                            </button>
+                            <button class="btn btn-info" onclick="exportToPDF('feedings')">
+                                <i class="fas fa-file-pdf"></i> PDF
+                            </button>
+                            <button class="btn btn-success" onclick="exportToTXT('feedings')">
+                                <i class="fas fa-file-alt"></i> TXT
+                            </button>
+                            <label class="file-label">
+                                <i class="fas fa-file-import"></i> Importar
+                                <input type="file" id="importFeedings" class="file-input" accept=".txt" onchange="importFromTXT('feedings', this)">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="feedingsTable">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Refeição</th>
+                                    <th>Alimentos</th>
+                                    <th>Alunos</th>
+                                    <th>Responsável</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Registros serão adicionados via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Página Relatórios -->
+            <div id="relatorios" class="page">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-chart-bar"></i> Relatórios</h2>
+                    </div>
+                    <div class="card-body">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                            <div class="card">
+                                <h3><i class="fas fa-chart-pie"></i> Consumo de Alimentos</h3>
+                                <canvas id="foodConsumptionChart" height="200"></canvas>
+                            </div>
+                            <div class="card">
+                                <h3><i class="fas fa-chart-line"></i> Alunos Atendidos</h3>
+                                <canvas id="studentsChart" height="200"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="card" style="margin-top: 20px;">
+                            <h3><i class="fas fa-table"></i> Relatório Detalhado</h3>
+                            <div style="margin-top: 15px;">
+                                <button class="btn btn-primary" onclick="generateDetailedReport()">
+                                    <i class="fas fa-file-export"></i> Gerar Relatório Completo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Página Configurações -->
+            <div id="configuracoes" class="page">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i class="fas fa-cog"></i> Configurações do Sistema</h2>
+                    </div>
+                    <div class="card-body">
+                        <form id="settingsForm">
+                            <div class="form-group">
+                                <label for="schoolName"><i class="fas fa-school"></i> Nome da Escola</label>
+                                <input type="text" id="schoolName" placeholder="Digite o nome da escola">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="schoolAddress"><i class="fas fa-map-marker-alt"></i> Endereço</label>
+                                <input type="text" id="schoolAddress" placeholder="Digite o endereço da escola">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="schoolContact"><i class="fas fa-phone"></i> Contato</label>
+                                <input type="text" id="schoolContact" placeholder="Digite o telefone de contato">
+                            </div>
+                            
+                            <button type="button" class="btn btn-primary" onclick="saveSettings()">
+                                <i class="fas fa-save"></i> Salvar Configurações
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="backup-section">
+                    <h3 class="backup-title"><i class="fas fa-database"></i> Backup do Sistema</h3>
+                    <div class="backup-actions">
+                        <button class="btn btn-warning" onclick="exportLocalStorageToTXT()">
+                            <i class="fas fa-file-export"></i> Exportar Backup Completo
+                        </button>
+                        <label class="file-label">
+                            <i class="fas fa-file-import"></i> Importar Backup
+                            <input type="file" id="importBackup" class="file-input" accept=".txt" onchange="importLocalStorageFromTXT(this)">
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </main>
 
     <!-- Modal para adicionar item -->
     <div id="addItemModal" class="modal">
@@ -463,6 +955,7 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Inicializa o jsPDF
         const { jsPDF } = window.jspdf;
@@ -490,6 +983,93 @@
                 notes: "Preparo normal"
             }
         ];
+
+        // Configurações
+        let settings = JSON.parse(localStorage.getItem('merendaSettings')) || {
+            schoolName: "",
+            schoolAddress: "",
+            schoolContact: ""
+        };
+
+        // Toggle sidebar em dispositivos móveis
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            
+            // Bloquear/desbloquear scroll do body
+            document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+        }
+
+        // Fechar sidebar ao clicar em um link (para mobile)
+        document.querySelectorAll('.sidebar-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 992) {
+                    toggleSidebar();
+                }
+            });
+        });
+
+        // Navegação entre páginas
+        function setupNavigation() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove a classe active de todos os links
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    
+                    // Adiciona a classe active apenas ao link clicado
+                    this.classList.add('active');
+                    
+                    // Oculta todas as páginas
+                    document.querySelectorAll('.page').forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    
+                    // Mostra apenas a página correspondente
+                    const pageId = this.getAttribute('data-page');
+                    document.getElementById(pageId).classList.add('active');
+                    
+                    // Atualiza o título do header
+                    updateHeaderTitle(pageId);
+                    
+                    // Se for a página de relatórios, atualiza os gráficos
+                    if (pageId === 'relatorios') {
+                        updateCharts();
+                    }
+                });
+            });
+        }
+
+        // Atualiza o título do header conforme a página
+        function updateHeaderTitle(pageId) {
+            const titleMap = {
+                'dashboard': 'Dashboard',
+                'estoque': 'Controle de Estoque',
+                'alimentacao': 'Registro de Alimentação',
+                'relatorios': 'Relatórios',
+                'configuracoes': 'Configurações'
+            };
+            
+            const iconMap = {
+                'dashboard': 'fa-tachometer-alt',
+                'estoque': 'fa-boxes',
+                'alimentacao': 'fa-clipboard-list',
+                'relatorios': 'fa-chart-bar',
+                'configuracoes': 'fa-cog'
+            };
+            
+            const headerTitle = document.querySelector('.header-title');
+            headerTitle.innerHTML = `
+                <i class="fas ${iconMap[pageId]}"></i>
+                <span>${titleMap[pageId]}</span>
+            `;
+        }
 
         // Funções para manipular os modais
         function openModal(modalId) {
@@ -544,6 +1124,7 @@
             renderInventory();
             closeModal('addItem');
             showAlert('Item adicionado com sucesso!', 'success');
+            updateDashboardStats();
         }
 
         // Função para adicionar um campo de alimento no formulário de alimentação
@@ -669,6 +1250,7 @@
             renderFeedings();
             closeModal('addFeeding');
             showAlert('Alimentação registrada com sucesso!', 'success');
+            updateDashboardStats();
         }
 
         // Função para renderizar a tabela de estoque
@@ -748,6 +1330,7 @@
                 saveData();
                 renderInventory();
                 showAlert('Item removido com sucesso!', 'success');
+                updateDashboardStats();
             }
         }
 
@@ -758,6 +1341,7 @@
                 saveData();
                 renderFeedings();
                 showAlert('Registro de alimentação excluído com sucesso!', 'success');
+                updateDashboardStats();
             }
         }
 
@@ -765,6 +1349,7 @@
         function saveData() {
             localStorage.setItem('merendaInventory', JSON.stringify(inventory));
             localStorage.setItem('merendaFeedings', JSON.stringify(feedings));
+            localStorage.setItem('merendaSettings', JSON.stringify(settings));
         }
 
         // Função para exportar para PDF
@@ -773,18 +1358,31 @@
             const title = type === 'inventory' ? 'Relatório de Estoque' : 'Registros de Alimentação';
             const date = formatDate(new Date().toISOString(), true);
             
+            // Adicionar informações da escola se disponível
+            if (settings.schoolName) {
+                doc.setFontSize(14);
+                doc.setTextColor(40, 62, 80);
+                doc.text(settings.schoolName, 105, 15, { align: 'center' });
+                
+                if (settings.schoolAddress) {
+                    doc.setFontSize(10);
+                    doc.setTextColor(100, 100, 100);
+                    doc.text(settings.schoolAddress, 105, 20, { align: 'center' });
+                }
+            }
+            
             // Cabeçalho do PDF
             doc.setFontSize(18);
-            doc.setTextColor(40, 62, 80); // Cor azul escuro
-            doc.text(title, 105, 20, { align: 'center' });
+            doc.setTextColor(40, 62, 80);
+            doc.text(title, 105, settings.schoolName ? 30 : 20, { align: 'center' });
             
             doc.setFontSize(12);
             doc.setTextColor(100, 100, 100);
-            doc.text(`Emitido em: ${date}`, 105, 30, { align: 'center' });
+            doc.text(`Emitido em: ${date}`, 105, settings.schoolName ? 35 : 30, { align: 'center' });
             
             // Linha divisória
             doc.setDrawColor(200, 200, 200);
-            doc.line(20, 35, 190, 35);
+            doc.line(20, settings.schoolName ? 40 : 35, 190, settings.schoolName ? 40 : 35);
             
             if (type === 'inventory') {
                 // Tabela de estoque
@@ -811,67 +1409,23 @@
                 doc.autoTable({
                     head: headers,
                     body: data,
-                    startY: 40,
+                    startY: settings.schoolName ? 45 : 40,
                     theme: 'grid',
                     headStyles: {
-                        fillColor: [44, 62, 80], // Azul escuro
+                        fillColor: [44, 62, 80],
                         textColor: 255,
                         fontSize: 10
                     },
                     alternateRowStyles: {
                         fillColor: [245, 245, 245]
                     },
-                    columnStyles: {
-                        0: { cellWidth: 'auto' },
-                        1: { cellWidth: 'auto' },
-                        2: { cellWidth: 'auto' },
-                        3: { cellWidth: 'auto' },
-                        4: { cellWidth: 'auto' }
-                    },
-                    margin: { top: 40 }
+                    margin: { top: settings.schoolName ? 45 : 40 }
                 });
                 
                 // Rodapé
                 doc.setFontSize(10);
                 doc.setTextColor(100, 100, 100);
                 doc.text(`Total de itens: ${inventory.length}`, 20, doc.lastAutoTable.finalY + 15);
-                
-                // Adicionar página de resumo
-                doc.addPage();
-                doc.setFontSize(16);
-                doc.setTextColor(40, 62, 80);
-                doc.text('Resumo do Estoque', 105, 20, { align: 'center' });
-                
-                // Gráfico de status (simulado)
-                const statusCounts = {
-                    Crítico: inventory.filter(i => i.quantity <= i.minStock * 0.3).length,
-                    Atenção: inventory.filter(i => i.quantity > i.minStock * 0.3 && i.quantity <= i.minStock).length,
-                    OK: inventory.filter(i => i.quantity > i.minStock).length
-                };
-                
-                // Desenhar gráfico simples
-                const startY = 40;
-                const maxWidth = 150;
-                const total = inventory.length;
-                
-                Object.entries(statusCounts).forEach(([status, count], index) => {
-                    if (count === 0) return;
-                    
-                    const width = (count / total) * maxWidth;
-                    const y = startY + (index * 15);
-                    
-                    // Barra
-                    if (status === 'Crítico') doc.setFillColor(231, 76, 60);
-                    else if (status === 'Atenção') doc.setFillColor(243, 156, 18);
-                    else doc.setFillColor(46, 204, 113);
-                    
-                    doc.rect(30, y, width, 10, 'F');
-                    
-                    // Legenda
-                    doc.setFontSize(10);
-                    doc.setTextColor(80, 80, 80);
-                    doc.text(`${status}: ${count} itens (${Math.round((count / total) * 100)}%)`, 35 + width, y + 7);
-                });
                 
             } else {
                 // Tabela de alimentação
@@ -893,7 +1447,7 @@
                 doc.autoTable({
                     head: headers,
                     body: data,
-                    startY: 40,
+                    startY: settings.schoolName ? 45 : 40,
                     theme: 'grid',
                     headStyles: {
                         fillColor: [44, 62, 80],
@@ -903,10 +1457,7 @@
                     alternateRowStyles: {
                         fillColor: [245, 245, 245]
                     },
-                    columnStyles: {
-                        2: { cellWidth: 60 } // Largura fixa para coluna de alimentos
-                    },
-                    margin: { top: 40 }
+                    margin: { top: settings.schoolName ? 45 : 40 }
                 });
                 
                 // Rodapé
@@ -925,9 +1476,24 @@
             let content = '';
             let filename = '';
             
+            // Adicionar informações da escola se disponível
+            if (settings.schoolName) {
+                content += `=== ${settings.schoolName.toUpperCase()} ===\n`;
+                
+                if (settings.schoolAddress) {
+                    content += `Endereço: ${settings.schoolAddress}\n`;
+                }
+                
+                if (settings.schoolContact) {
+                    content += `Contato: ${settings.schoolContact}\n`;
+                }
+                
+                content += '\n';
+            }
+            
             if (type === 'inventory') {
                 filename = 'estoque_merenda.txt';
-                content = '=== ESTOQUE DE MERENDA ===\n\n';
+                content += '=== ESTOQUE DE MERENDA ===\n\n';
                 
                 inventory.forEach(item => {
                     content += `Item: ${item.name}\n`;
@@ -938,7 +1504,7 @@
                 });
             } else if (type === 'feedings') {
                 filename = 'registros_alimentacao.txt';
-                content = '=== REGISTROS DE ALIMENTAÇÃO ===\n\n';
+                content += '=== REGISTROS DE ALIMENTAÇÃO ===\n\n';
                 
                 // Ordenar por data (mais recente primeiro)
                 const sortedFeedings = [...feedings].sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -1010,6 +1576,7 @@
                     saveData();
                     renderInventory();
                     renderFeedings();
+                    updateDashboardStats();
                 } catch (error) {
                     showAlert(`Erro ao importar arquivo: ${error.message}`, 'danger');
                     console.error(error);
@@ -1025,7 +1592,8 @@
         function exportLocalStorageToTXT() {
             const data = {
                 inventory: JSON.parse(localStorage.getItem('merendaInventory')) || [],
-                feedings: JSON.parse(localStorage.getItem('merendaFeedings')) || []
+                feedings: JSON.parse(localStorage.getItem('merendaFeedings')) || [],
+                settings: JSON.parse(localStorage.getItem('merendaSettings')) || {}
             };
             
             const content = JSON.stringify(data, null, 2);
@@ -1051,19 +1619,25 @@
                     const content = e.target.result;
                     const data = JSON.parse(content);
                     
-                    if (!data.inventory || !data.feedings) {
+                    if (!data.inventory || !data.feedings || !data.settings) {
                         throw new Error('Formato inválido para backup');
                     }
                     
                     localStorage.setItem('merendaInventory', JSON.stringify(data.inventory));
                     localStorage.setItem('merendaFeedings', JSON.stringify(data.feedings));
+                    localStorage.setItem('merendaSettings', JSON.stringify(data.settings));
                     
                     // Recarregar os dados
                     inventory = JSON.parse(localStorage.getItem('merendaInventory')) || [];
                     feedings = JSON.parse(localStorage.getItem('merendaFeedings')) || [];
+                    settings = JSON.parse(localStorage.getItem('merendaSettings')) || {};
                     
+                    // Atualizar a UI
                     renderInventory();
                     renderFeedings();
+                    loadSettings();
+                    updateDashboardStats();
+                    
                     showAlert('Backup do sistema importado com sucesso!', 'success');
                 } catch (error) {
                     showAlert(`Erro ao importar backup: ${error.message}`, 'danger');
@@ -1074,6 +1648,288 @@
             
             // Limpar o input para permitir nova seleção do mesmo arquivo
             input.value = '';
+        }
+
+        // Função para carregar configurações
+        function loadSettings() {
+            document.getElementById('schoolName').value = settings.schoolName || '';
+            document.getElementById('schoolAddress').value = settings.schoolAddress || '';
+            document.getElementById('schoolContact').value = settings.schoolContact || '';
+        }
+
+        // Função para salvar configurações
+        function saveSettings() {
+            settings = {
+                schoolName: document.getElementById('schoolName').value,
+                schoolAddress: document.getElementById('schoolAddress').value,
+                schoolContact: document.getElementById('schoolContact').value
+            };
+            
+            saveData();
+            showAlert('Configurações salvas com sucesso!', 'success');
+        }
+
+        // Função para atualizar estatísticas do dashboard
+        function updateDashboardStats() {
+            document.getElementById('totalItems').textContent = inventory.length;
+            document.getElementById('totalFeedings').textContent = feedings.length;
+            
+            const criticalItems = inventory.filter(item => item.quantity <= item.minStock * 0.3).length;
+            document.getElementById('criticalItems').textContent = criticalItems;
+        }
+
+        // Função para atualizar gráficos
+        function updateCharts() {
+            // Gráfico de consumo de alimentos
+            const foodConsumptionCtx = document.getElementById('foodConsumptionChart').getContext('2d');
+            
+            // Calcular consumo por alimento
+            const foodConsumption = {};
+            feedings.forEach(feeding => {
+                feeding.foods.forEach(food => {
+                    if (!foodConsumption[food.name]) {
+                        foodConsumption[food.name] = 0;
+                    }
+                    foodConsumption[food.name] += food.quantity;
+                });
+            });
+            
+            const foodNames = Object.keys(foodConsumption);
+            const foodQuantities = Object.values(foodConsumption);
+            
+            // Destruir gráfico anterior se existir
+            if (window.foodConsumptionChart) {
+                window.foodConsumptionChart.destroy();
+            }
+            
+            window.foodConsumptionChart = new Chart(foodConsumptionCtx, {
+                type: 'pie',
+                data: {
+                    labels: foodNames,
+                    datasets: [{
+                        data: foodQuantities,
+                        backgroundColor: [
+                            '#3498db', '#2ecc71', '#f39c12', '#e74c3c', '#9b59b6',
+                            '#1abc9c', '#d35400', '#34495e', '#16a085', '#c0392b'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Consumo de Alimentos'
+                        }
+                    }
+                }
+            });
+            
+            // Gráfico de alunos atendidos
+            const studentsCtx = document.getElementById('studentsChart').getContext('2d');
+            
+            // Agrupar por data e tipo de refeição
+            const studentsData = {};
+            feedings.forEach(feeding => {
+                const date = formatDate(feeding.date);
+                if (!studentsData[date]) {
+                    studentsData[date] = {};
+                }
+                if (!studentsData[date][feeding.type]) {
+                    studentsData[date][feeding.type] = 0;
+                }
+                studentsData[date][feeding.type] += feeding.quantity;
+            });
+            
+            const dates = Object.keys(studentsData).sort();
+            const mealTypes = [...new Set(feedings.map(f => f.type))];
+            
+            // Preparar dados para o gráfico
+            const datasets = mealTypes.map(type => {
+                return {
+                    label: type,
+                    data: dates.map(date => studentsData[date][type] || 0),
+                    backgroundColor: getRandomColor()
+                };
+            });
+            
+            // Destruir gráfico anterior se existir
+            if (window.studentsChart) {
+                window.studentsChart.destroy();
+            }
+            
+            window.studentsChart = new Chart(studentsCtx, {
+                type: 'bar',
+                data: {
+                    labels: dates,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            stacked: true
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Número de Alunos'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Alunos Atendidos por Data'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Função para gerar relatório detalhado
+        function generateDetailedReport() {
+            const doc = new jsPDF();
+            const date = formatDate(new Date().toISOString(), true);
+            
+            // Adicionar informações da escola se disponível
+            if (settings.schoolName) {
+                doc.setFontSize(14);
+                doc.setTextColor(40, 62, 80);
+                doc.text(settings.schoolName, 105, 15, { align: 'center' });
+                
+                if (settings.schoolAddress) {
+                    doc.setFontSize(10);
+                    doc.setTextColor(100, 100, 100);
+                    doc.text(settings.schoolAddress, 105, 20, { align: 'center' });
+                }
+            }
+            
+            // Título do relatório
+            doc.setFontSize(18);
+            doc.setTextColor(40, 62, 80);
+            doc.text('Relatório Detalhado', 105, settings.schoolName ? 30 : 20, { align: 'center' });
+            
+            doc.setFontSize(12);
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Emitido em: ${date}`, 105, settings.schoolName ? 35 : 30, { align: 'center' });
+            
+            // Linha divisória
+            doc.setDrawColor(200, 200, 200);
+            doc.line(20, settings.schoolName ? 40 : 35, 190, settings.schoolName ? 40 : 35);
+            
+            // Seção de Estoque
+            doc.setFontSize(14);
+            doc.setTextColor(40, 62, 80);
+            doc.text('Estoque Atual', 20, settings.schoolName ? 50 : 45);
+            
+            const inventoryHeaders = [['Item', 'Quantidade', 'Unidade', 'Estoque Mínimo', 'Status']];
+            const inventoryData = inventory.map(item => {
+                let status;
+                if (item.quantity <= item.minStock * 0.3) {
+                    status = 'Crítico';
+                } else if (item.quantity <= item.minStock) {
+                    status = 'Atenção';
+                } else {
+                    status = 'OK';
+                }
+                
+                return [
+                    item.name + (item.category ? ` (${item.category})` : ''),
+                    item.quantity.toString(),
+                    item.unit,
+                    item.minStock.toString(),
+                    status
+                ];
+            });
+            
+            doc.autoTable({
+                head: inventoryHeaders,
+                body: inventoryData,
+                startY: settings.schoolName ? 55 : 50,
+                theme: 'grid',
+                headStyles: {
+                    fillColor: [44, 62, 80],
+                    textColor: 255,
+                    fontSize: 10
+                },
+                alternateRowStyles: {
+                    fillColor: [245, 245, 245]
+                }
+            });
+            
+            // Seção de Alimentação
+            doc.setFontSize(14);
+            doc.setTextColor(40, 62, 80);
+            doc.text('Registros de Alimentação', 20, doc.lastAutoTable.finalY + 15);
+            
+            const feedingHeaders = [['Data', 'Refeição', 'Alimentos', 'Alunos', 'Responsável']];
+            const feedingData = feedings.map(feeding => {
+                const foodsList = feeding.foods.map(f => 
+                    `${f.name}: ${f.quantity} ${f.unit}`
+                ).join('\n');
+                
+                return [
+                    formatDate(feeding.date),
+                    feeding.type,
+                    foodsList,
+                    feeding.quantity.toString(),
+                    feeding.responsible
+                ];
+            });
+            
+            doc.autoTable({
+                head: feedingHeaders,
+                body: feedingData,
+                startY: doc.lastAutoTable.finalY + 20,
+                theme: 'grid',
+                headStyles: {
+                    fillColor: [44, 62, 80],
+                    textColor: 255,
+                    fontSize: 10
+                },
+                alternateRowStyles: {
+                    fillColor: [245, 245, 245]
+                }
+            });
+            
+            // Resumo
+            doc.setFontSize(14);
+            doc.setTextColor(40, 62, 80);
+            doc.text('Resumo', 20, doc.lastAutoTable.finalY + 15);
+            
+            const summaryText = [
+                `Total de itens no estoque: ${inventory.length}`,
+                `Itens com estoque crítico: ${inventory.filter(item => item.quantity <= item.minStock * 0.3).length}`,
+                `Total de refeições registradas: ${feedings.length}`,
+                `Total de alunos atendidos: ${feedings.reduce((sum, f) => sum + f.quantity, 0)}`
+            ];
+            
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+            summaryText.forEach((text, i) => {
+                doc.text(text, 20, doc.lastAutoTable.finalY + 25 + (i * 7));
+            });
+            
+            // Salvar o PDF
+            doc.save(`relatorio_detalhado_merenda_${date.replace(/\//g, '-')}.pdf`);
+            showAlert('Relatório detalhado gerado com sucesso!', 'success');
+        }
+
+        // Função auxiliar para gerar cores aleatórias
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
         }
 
         // Função auxiliar para formatar data
@@ -1091,6 +1947,12 @@
 
         // Inicialização
         document.addEventListener('DOMContentLoaded', () => {
+            // Configurar navegação
+            setupNavigation();
+            
+            // Carregar configurações
+            loadSettings();
+            
             // Definir data atual como padrão no formulário de refeição
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('feedingDate').value = today;
@@ -1099,20 +1961,15 @@
             renderInventory();
             renderFeedings();
             
-            // Adicionar botão de backup
-            const backupDiv = document.createElement('div');
-            backupDiv.style.marginTop = '20px';
-            backupDiv.style.textAlign = 'center';
-            backupDiv.innerHTML = `
-                <button class="btn btn-warning" onclick="exportLocalStorageToTXT()">
-                    <i class="fas fa-file-export"></i> Exportar Backup Completo
-                </button>
-                <label class="file-label" style="display: inline-block; margin-left: 10px;">
-                    <i class="fas fa-file-import"></i> Importar Backup
-                    <input type="file" id="importBackup" class="file-input" accept=".txt" onchange="importLocalStorageFromTXT(this)">
-                </label>
-            `;
-            document.querySelector('.container').appendChild(backupDiv);
+            // Atualizar estatísticas do dashboard
+            updateDashboardStats();
+            
+            // Fechar modais ao clicar no overlay (fora do modal)
+            window.addEventListener('click', function(event) {
+                if (event.target.className === 'modal') {
+                    event.target.style.display = 'none';
+                }
+            });
         });
     </script>
 </body>
